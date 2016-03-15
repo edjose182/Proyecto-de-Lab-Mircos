@@ -2,6 +2,7 @@ syms x
 i=0;
 n=757;
 condicion=0;
+esca=0;
 load Datos.txt;
 datos_int=ones(n,1);
 pwm_output=ones(n,1);
@@ -15,13 +16,30 @@ for i=1:n
     
     datos_int(i,1)=y;
     
-    result(i,1)=int(datos_int(i,1),x,0,0.05);
-    
-    condicion=1*(result(i,1)>0);
-    
-    pwm_output(i,1)=condicion*(1.000e-04);
+    result(i,1)=(int(datos_int(i,1),x,0,0.05))*(330000/13);
     
     k(i,1)=0+i;
+
+    %%%esca=(k(i,1)*(1.000e-04));
+    counter=-3+i;
+    
+    if (counter>5)
+        
+        counter=-3;
+        
+        condicion=1*(result(i,1)>0);
+        
+    else
+        
+        condicion=1*(result(i,1)>0);
+        
+    end
+    
+
+    
+    pwm_output(i,1)=condicion;
+    
+    
 end
 
 % subplot(2,2,1)
@@ -32,7 +50,9 @@ end
 % plot(k,pwm_output,'red')
 % title('PWM')
 
-max(max(result));
+max(max(result))
+
+min(min(result))
 
 plot(k,result)
 hold on
