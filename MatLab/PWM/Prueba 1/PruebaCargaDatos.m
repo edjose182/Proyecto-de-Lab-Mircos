@@ -1,67 +1,49 @@
 syms x
 i=0;
-n=757;
 condicion=0;
-esca=0;
 load Datos.txt;
-datos_int=ones(n,1);
-pwm_output=ones(n,1);
-result=ones(n,1);
-result2=ones(n,1);
-k=ones(n,1);
-
+s=size(Datos);
+% n=s(1,1);
+n=100;
+t=ones(n,1);
+velocidad=ones(n,1);
+v0=0;
+desplazamiento=ones(n,1);
+d0=0;
+delta_t=0.05;
+%aceleracion=ones(n,1);
 
 for i=1:n
-    
-    y=int(Datos(i,1),x,0,0.05);
-    
-    datos_int(i,1)=y;
-    
-    result2(i,1)=datos_int(i,1)*(0.002);
-    
-    result(i,1)=(int(datos_int(i,1),x,0,0.05));
-    
-    k(i,1)=0+i;
 
-    %%%esca=(k(i,1)*(1.000e-04));
-    counter=-3+i;
+    %%%aceleracion(i,1)=50;
     
-    if (counter>5)
-        
-        counter=-3;
-        
-        condicion=1*(result(i,1)>0);
-        
-    else
-        
-        condicion=1*(result(i,1)>0);
-        
-    end
-    
+    velocidad(i,1)=int(Datos(i,1),x,0,delta_t)+v0;
 
-    
-    pwm_output(i,1)=condicion;
-    
-    
+    v0=velocidad(i,1);
+
+    desplazamiento(i,1)=int(velocidad(i,1),x,0,delta_t)+d0;
+
+    d0=desplazamiento(i,1);
+
+    t(i,1)=0+i;
+
 end
 
-% subplot(2,2,1)
-% plot(k,result,'blue')
-% title('Señal analogica')
+max(max(Datos))
 
-% subplot(2,2,2)
-% plot(k,pwm_output,'red')
-% title('PWM')
+min(min(Datos))
 
-max(max(result))
+max(max(velocidad))
 
-min(min(result))
+min(min(velocidad))
 
-max(max(result2))
+max(max(desplazamiento))
 
-min(min(result2))
+min(min(desplazamiento))
 
-plot(k,result2)
+% plot(t,Datos,'blue')
+% hold on
+plot(t,velocidad,'r')
 hold on
-plot(k,pwm_output,'r')
+plot(t,desplazamiento,'green')
 
