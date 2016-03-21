@@ -7,6 +7,7 @@ load Datos.txt;
 datos_int=ones(n,1);
 pwm_output=ones(n,1);
 result=ones(n,1);
+result2=ones(n,1);
 k=ones(n,1);
 
 
@@ -16,7 +17,9 @@ for i=1:n
     
     datos_int(i,1)=y;
     
-    result(i,1)=(int(datos_int(i,1),x,0,0.05))*(330000/13);
+    result2(i,1)=datos_int(i,1)*(0.002);
+    
+    result(i,1)=(int(datos_int(i,1),x,0,0.05));
     
     k(i,1)=0+i;
 
@@ -54,7 +57,11 @@ max(max(result))
 
 min(min(result))
 
-plot(k,result)
+max(max(result2))
+
+min(min(result2))
+
+plot(k,result2)
 hold on
 plot(k,pwm_output,'r')
 
