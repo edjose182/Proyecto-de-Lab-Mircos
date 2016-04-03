@@ -1,3 +1,14 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: Instituto Tecnológico de Costa Rica
+// Engineers: Edgar Campos, Edgar Solera y José Netzer 
+// 
+// Create Date:     23/03/2016 
+// Module Name:    datos_envio
+// Description: Este codigo se encarga de procesar los datos de un archivo .txt(el cual contiene acelaciones(m/cm^2)).
+// Estos datos son integrados 2 veces de forma que se pueda obtener la velocidad y el desplazamiento. Luego de operar
+// los datos, estos son escalados y enviados al arduino (los datos se escalan de forma que esten en un rango entre -400 y 400)
+//////////////////////////////////////////////////////////////////////////////////
+
 clear all
 clc
 syms x 
