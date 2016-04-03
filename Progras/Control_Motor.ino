@@ -1,3 +1,13 @@
+//////////////////////////////////////////////////////////////////////////////////
+// Company: Instituto Tecnológico de Costa Rica
+// Engineers: Edgar Campos, Edgar Solera y José Netzer 
+// 
+// Create Date:     23/03/2016 
+// Module Name:    Control_Motor
+// Description: Este codigo se encarga de controlar la velocidad y sentido de rotación del motor
+// esto mediante un envio de datos desde matlab hasta el arduino.
+//////////////////////////////////////////////////////////////////////////////////
+
 #include "DualMC33926MotorShield.h"  ///Primero se habilitan las librerias
 
 DualMC33926MotorShield md; ///Se habilita la variable md
@@ -26,41 +36,12 @@ void loop() {
   if (Serial.available() > 0) {
 
     
-    digitalWrite(D2n,HIGH);   ////Se ponen en alto para
-                              ////activar el movimiento del motor
-    digitalWrite(M1PWM,HIGH); 
-  
-    int num = Serial.readString().toInt();   ////Se convierte el dato recibido en un valor entero
-
-    if(num>0){
-    
-      digitalWrite(M1DIR,LOW);  ///Se evalua el signo del dato 
-                                ///Para definir la dirección de giro
-    }
-    
-    else if(num<0){
-
-      digitalWrite(M1DIR,HIGH);     ///Se evalua el signo del dato
-                                    ///Para definir la dirección de giro
-      num=num*(-1);                 /// Se convierte el valor recibido a un entero positivo
-    }
-
-    else if(num==0){
-
-      digitalWrite(D2n,LOW);       ///Si el valor recibido es cero, el motor se colocara en una posición fija(punto muerto)
+    int velocidad = Serial.readString().toInt();   ////Se convierte el dato recibido en un valor entero
 
 
-    }
-
-    md.setM1Speed(num);            /// Se regula la velocidad del motor
-    }
-
-   else{
-
-    digitalWrite(M1PWM,LOW);      ///Si no se recibe ningun dato el mator se detiene
-
-    digitalWrite(D2n,HIGH);
-    
+    md.setM1Speed(velocidad); //Se regula la velocidad del motor introduciendo un valor de corriente que esta entre -400 y 400
+                              //El dato "velocidad" es la velocidad procesada en matlab pero escalada para que este en un rango
+                              //Entre -400 y 400
     
    }
 }
