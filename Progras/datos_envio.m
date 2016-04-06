@@ -1,13 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////////
-// Company: Instituto Tecnológico de Costa Rica
-// Engineers: Edgar Campos, Edgar Solera y José Netzer 
-// 
-// Create Date:     23/03/2016 
-// Module Name:    datos_envio
-// Description: Este codigo se encarga de procesar los datos de un archivo .txt(el cual contiene acelaciones(m/cm^2)).
-// Estos datos son integrados 2 veces de forma que se pueda obtener la velocidad y el desplazamiento. Luego de operar
-// los datos, estos son escalados y enviados al arduino (los datos se escalan de forma que esten en un rango entre -400 y 400)
-//////////////////////////////////////////////////////////////////////////////////
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Company: Instituto Tecnológico de Costa Rica
+% Engineers: Edgar Campos, Edgar Solera y José Netzer 
+% 
+% Create Date:     23/03/2016 
+% Module Name:    datos_envio
+% Description: Este codigo se encarga de procesar los datos de un archivo .txt(el cual contiene acelaciones(m/cm^2)).
+% Estos datos son integrados 2 veces de forma que se pueda obtener la velocidad y el desplazamiento. Luego de operar
+% los datos, estos son escalados y enviados al arduino (los datos se escalan de forma que esten en un rango entre -400 y 400)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear all
 clc
@@ -18,6 +18,7 @@ s=size(Datos);
 n=100;
 t=ones(n,1);
 velocidad=ones(n,1);
+velocidad_arduino=ones(n,1);
 v0=0;
 desplazamiento=ones(n,1);
 d0=0;
@@ -40,15 +41,39 @@ for i=1:n
 
 end
  
-answer=0; % this is where we'll store the user's answer
-arduino=serial('COM4','BaudRate',9600); % create serial communication object on port COM4
- 
-fopen(arduino); % initiate arduino communication
- 
-for i=1:n
-  
-    fprintf(arduino,'%i',double(answer)); % send answer variable content to arduino
-     answer=aceleracion(i,1);
+%%%Se escalaran los datos de velocidad para que estos esten entre el rango de -400 y 400
+
+vo_max=400;
+
+vo_min=-400;
+
+vin_min=min(min(velocidad));
+
+vin_max=max(max(velocidad));
+
+m=(vo_max-vo_min)/(vin_max-vin_min);
+
+b=vo_max-m*vin_max;
+
+
+for k=1:n
+   
+velocidad_arduino(k,1)=m*velocidad(k,1)+b;
+
+velocidad_arduino(k,1)=round(velocidad_arduino(k,1));
+
 end
- 
-fclose(arduino); % end communication with arduino
+
+
+% answer=0; % this is where we'll store the user's answer
+% arduino=serial('COM4','BaudRate',9600); % create serial communication object on port COM4
+%  
+% fopen(arduino); % initiate arduino communication
+%  
+% for i=1:n
+%   
+%     fprintf(arduino,'%i',double(answer)); % send answer variable content to arduino
+%      answer=aceleracion(i,1);
+% end
+%  
+% fclose(arduino); % end communication with arduino
